@@ -17,6 +17,27 @@ app.get('/connect', (req, res) => db.connect(res))
 
 app.get('/disconnect', (req, res) => db.disconnect(res))
 
+app.get('/dados', (req, res) => {
+	try {
+		if(dado != undefined)
+			return dado
+	
+	} catch(err) {
+		return res.status(400).send({error: 'erro ao mostrar dado' })
+	}
+})
+
+app.post('/dado', (req,res) => {
+	try {
+		var dado = {
+			valor: req.body.valorObservado,
+			nivel: req.body.nivelLuminosidade
+		}
+	} catch(err) {
+		return res.status(400).send({error: 'erro ao inserir dado' })
+	}
+})
+
 const server = https.createServer(app)
 
 server.listen(PORT, () => console.log(`No ar, porta ${PORT}...`))

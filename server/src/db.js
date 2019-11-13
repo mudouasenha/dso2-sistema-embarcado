@@ -13,3 +13,8 @@ function connect (res) {}
 
 function disconnect (res) {}
 
+function findAllDados(req, res) {}
+
+function insertDado (req, res) {}
+
+function removeDado (req, res) {}
