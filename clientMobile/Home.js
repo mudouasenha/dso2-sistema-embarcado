@@ -10,9 +10,7 @@ export default class HomeScreen extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {
-      isLoading: true
-    };
+    this.state = {};
   }
 
   componentDidMount(){
@@ -27,10 +25,13 @@ export default class HomeScreen extends React.Component {
     this.focusListener.remove();
   } 
 
+  componentDidUpdate(){
+    this.buscaDados()
+  }
+
   buscaDados = () => {
     
     var resposta
-    this.setState({ isLoading: true})
     return fetch(
         `enderecoDaAPI`
       )
@@ -38,7 +39,6 @@ export default class HomeScreen extends React.Component {
         .then(resJson => {
           resposta = resJson;
           this.setState({
-              isLoading: false,
               nivelLuminosidade: resposta.nivelLuminosidade,
               valorObservado: resposta.valorObservado,
             }, () => {});
@@ -52,7 +52,6 @@ export default class HomeScreen extends React.Component {
     const {navigate} = this.props.navigation;
     return (
       <View>
-      {this.state.isLoading ? <Text> Carregando... </Text> : <Text>  </Text>}
       <Text>Nível de luminosidade: {this.state.nivelLuminosidade}</Text>
       <Text>Valor lido pelo sensor: {this.state.valorObservado}</Text>
       </View>
