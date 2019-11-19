@@ -1,6 +1,6 @@
 import { PORT } from './env'
 
-import http from 'http'
+import https from 'https'
 import fs from 'fs'
 import path from 'path'
 import express from 'express'
@@ -16,10 +16,9 @@ app.use(express.static(path.resolve(__dirname, '../public')))
 app.get('/connect', (req, res) => db.connect(res))
 
 app.get('/', (req, res) => {
-	console.log("oi")
-	res.end("<p> OI </p>")
-})
+	return '<p> OI </p>'
 
+})
 
 app.get('/disconnect', (req, res) => db.disconnect(res))
 
@@ -44,6 +43,6 @@ app.post('/dado', (req,res) => {
 	}
 })
 
-const server = http.createServer(app)
+const server = https.createServer(app)
 
 server.listen(PORT, () => console.log(`No ar, porta ${PORT}...`))
