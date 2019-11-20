@@ -14,23 +14,17 @@ int limiteEscuro = 400;
 int valorObservado;
 char* nivelLuminosidade;
 
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "Marcia";
+const char* password = "99094129";
 
 HTTPClient http;
 
-StaticJsonBuffer<420> bufferJson;
-JsonObject& objetoJson;
+
 
 
 void setup() {
   Serial.begin(9600);
   delay(100);
-
-  objetoJson = bufferJson.createObject();
-
-  objetoJson["valor"] = 0;
-  objetoJson["nivel"] = "NÃO DEFINIDO";
   
   // Configura o led para saída
   pinMode(pinoLedGroove, OUTPUT);
@@ -79,18 +73,29 @@ void loop() {
     //Não acende o LED
     digitalWrite(pinoLedGroove, LOW);
         }
-
-  objetoJson["valor"] = valorOservado;
-  objetoJson["nivel"] = nivelLuminosidade;      
+        
+  //Montando objeto JSON
+  //char JSONMessage[] = " {\"valor\": valorObservado, \"nivel\": nivelLuminosidade}"; 
+  StaticJsonBuffer<300> JSONBuffer;
+  JsonObject& JsonEncoder = JSONBuffer.createObject();
+  JsonEncoder["valor"] = valorObservado;   
+  JsonEncoder["nivel"] = nivelLuminosidade;    
+  char JSONmessageBuffer[300];
+  JsonEncoder.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
+  Serial.println(JSONmessageBuffer);
   if(WiFi.status() == WL_CONNECTED){
     http.begin("http://mudouasenha.matheus.mtg.vms.ufsc.br/dado");
     http.addHeader("Content-Type", "application/json");
     http.addHeader("Accept", "application/json");
 
-    int resultadoHttp = http.POST(objetoJson);
+    int resultadoHttp = http.POST(JSONmessageBuffer);
+    String payload = http.getString();
 
     Serial.print("Resultado do POST: ");
     Serial.println(resultadoHttp);
+    Serial.println(payload);
+
+    
    
     http.end();
     }else{
