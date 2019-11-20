@@ -14,8 +14,8 @@ int limiteEscuro = 400;
 int valorObservado;
 char* nivelLuminosidade;
 
-const char* ssid = "Mi Phone";
-const char* password = "matheus123";
+const char* ssid = "";
+const char* password = "";
 
 HTTPClient http;
 
@@ -29,8 +29,8 @@ void setup() {
 
   objetoJson = bufferJson.createObject();
 
-  objetoJson["valorObservado"] = 0;
-  objetoJson["nivelLuminosidade"] = "NÃO DEFINIDO";
+  objetoJson["valor"] = 0;
+  objetoJson["nivel"] = "NÃO DEFINIDO";
   
   // Configura o led para saída
   pinMode(pinoLedGroove, OUTPUT);
@@ -80,11 +80,12 @@ void loop() {
     digitalWrite(pinoLedGroove, LOW);
         }
 
-  objetoJson["valorObservado"] = valorOservado;
-  objetoJson["nivelLuminosidade"] = nivelLuminosidade;      
+  objetoJson["valor"] = valorOservado;
+  objetoJson["nivel"] = nivelLuminosidade;      
   if(WiFi.status() == WL_CONNECTED){
-    http.begin("");
-    http.addHeader("Content-Type", "text/plain");
+    http.begin("http://mudouasenha.matheus.mtg.vms.ufsc.br/dado");
+    http.addHeader("Content-Type", "application/json");
+    http.addHeader("Accept", "application/json");
 
     int resultadoHttp = http.POST(objetoJson);
 
