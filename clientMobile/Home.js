@@ -33,14 +33,14 @@ export default class HomeScreen extends React.Component {
     
     var resposta
     return fetch(
-        `enderecoDaAPI`
+        `http://mudouasenha.matheus.mtg.vms.ufsc.br/dados`
       )
         .then(res => res.json())
         .then(resJson => {
           resposta = resJson;
           this.setState({
-              nivelLuminosidade: resposta.nivelLuminosidade,
-              valorObservado: resposta.valorObservado,
+              nivelLuminosidade: resposta.nivel,
+              valorObservado: resposta.valor,
             }, () => {});
         })
         .catch(error => {
