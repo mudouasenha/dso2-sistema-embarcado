@@ -75,16 +75,20 @@ void loop() {
         }
         
   //Montando objeto JSON
-  //char JSONMessage[] = " {\"valor\": valorObservado, \"nivel\": nivelLuminosidade}"; 
   StaticJsonBuffer<300> JSONBuffer;
   JsonObject& JsonEncoder = JSONBuffer.createObject();
+
+  //Atribui os valores obtidos pela placa para o objeto JSON
   JsonEncoder["valor"] = valorObservado;   
-  JsonEncoder["nivel"] = nivelLuminosidade;    
+  JsonEncoder["nivel"] = nivelLuminosidade;
+      
   char JSONmessageBuffer[300];
   JsonEncoder.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
   Serial.println(JSONmessageBuffer);
+  
   if(WiFi.status() == WL_CONNECTED){
-    http.begin("http://mudouasenha.matheus.mtg.vms.ufsc.br/dado");
+    //Monta o POST
+    http.begin("http://jsonplaceholder.typicode.com/posts");
     http.addHeader("Content-Type", "application/json");
     http.addHeader("Accept", "application/json");
 
@@ -94,8 +98,6 @@ void loop() {
     Serial.print("Resultado do POST: ");
     Serial.println(resultadoHttp);
     Serial.println(payload);
-
-    
    
     http.end();
     }else{
